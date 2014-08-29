@@ -1,5 +1,7 @@
 package com.JaredMavis.quicksend;
 
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +13,31 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
+	private class QuickEmail {
+		String[] _emails;
+		String _subjectPrefix = "";
+		String _subjectSuffix = "";
+		
+		String _subject;
+		String _text;
+		
+		public QuickEmail(String[] emails){
+			_emails = emails;
+		}
+		
+		public void sendEmail(String subject, String text){
+			Intent emailIntent = new Intent(Intent.ACTION_SEND);
+			emailIntent.setType(",essage/rfc822");
+			emailIntent.putExtra(Intent.EXTRA_EMAIL  , _emails);
+			emailIntent.putExtra(Intent.EXTRA_SUBJECT, _subjectPrefix + subject + _subjectSuffix);
+			emailIntent.putExtra(Intent.EXTRA_TEXT   , text);
+			try {
+			    startActivity(emailIntent);
+			} catch (android.content.ActivityNotFoundException ex) {
+			    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,16 +48,8 @@ public class MainActivity extends ActionBarActivity {
 		debugSend.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(Intent.ACTION_SEND);
-				i.setType("message/rfc822");
-				i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"hellfire073@hotmail.com"});
-				i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
-				i.putExtra(Intent.EXTRA_TEXT   , "body of email");
-				try {
-				    startActivity(i);
-				} catch (android.content.ActivityNotFoundException ex) {
-				    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-				}
+				QuickEmail emailMe = new QuickEmail(new String[]{"hellfire073@hotmail.com"});
+				emailMe.sendEmail("Test Subject", "Test Text");
 			}
 		});
 	}
