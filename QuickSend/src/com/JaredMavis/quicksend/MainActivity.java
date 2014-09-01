@@ -43,15 +43,6 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		Button debugSend = (Button) findViewById(R.id.debugSend);
-		debugSend.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				QuickEmail emailMe = new QuickEmail(new String[]{"hellfire073@hotmail.com"});
-				emailMe.sendEmail("Test Subject", "Test Text");
-			}
-		});
 	}
 
 	@Override
