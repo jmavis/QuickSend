@@ -7,25 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.JaredMavis.quicksend.MainActivity"
-    android:orientation="vertical"  >
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/debugSend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test" />
-
-    </LinearLayout>
+    android:orientation="vertical"
+    android:id="@+id/emailTemplateList"  >
 
 </LinearLayout>
