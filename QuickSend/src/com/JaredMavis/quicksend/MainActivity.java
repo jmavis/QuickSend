@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +55,14 @@ public class MainActivity extends ActionBarActivity {
 			String exampleText = _subjectPrefix + "-TEST SUBJECT-" + _subjectSuffix;
 			subjectText.setText(exampleText);
 			
+			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
+			debugSendButton.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					sendEmail("-TEST SUBJECT-", "TEST CONTENT");
+				}
+			});
+			
 			return (LinearLayout) generatedView;
 		}
 	}
@@ -80,7 +90,6 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
