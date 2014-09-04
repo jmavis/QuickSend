@@ -55,14 +55,14 @@ public class MainActivity extends ActionBarActivity {
 			String exampleText = _subjectPrefix + "-TEST SUBJECT-" + _subjectSuffix;
 			subjectText.setText(exampleText);
 			
-			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
-			debugSendButton.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					sendEmail("-TEST SUBJECT-", "TEST CONTENT");
-				}
-			});
-			
+//			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
+//			debugSendButton.setOnClickListener(new OnClickListener() {
+//				
+//				public void onClick(View v) {
+//					sendEmail("-TEST SUBJECT-", "TEST CONTENT");
+//				}
+//			});
+//			
 			return (LinearLayout) generatedView;
 		}
 	}
