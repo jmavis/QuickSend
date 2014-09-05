@@ -2,7 +2,6 @@ package com.JaredMavis.quicksend;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,20 +48,20 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		
-		public LinearLayout generate(LayoutInflater inflater){
+		public LinearLayout generate(LayoutInflater inflater, String subject, String text){
+			_subject = subject;
+			_text = text;
 			View generatedView = inflater.inflate(R.layout.email_template, null);
 			TextView subjectText = (TextView) generatedView.findViewById(R.id.subjectContet);
-			String exampleText = _subjectPrefix + "-TEST SUBJECT-" + _subjectSuffix;
-			subjectText.setText(exampleText);
+			subjectText.setText( _subjectPrefix + text + _subjectSuffix);
 			
-//			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
-//			debugSendButton.setOnClickListener(new OnClickListener() {
-//				
-//				public void onClick(View v) {
-//					sendEmail("-TEST SUBJECT-", "TEST CONTENT");
-//				}
-//			});
-//			
+			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
+			debugSendButton.setOnClickListener(new OnClickListener() {
+				
+				public void onClick(View v) {
+					sendEmail(_subject, _text);
+				}
+			});
 			return (LinearLayout) generatedView;
 		}
 	}
@@ -84,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);
 		List<QuickEmail> debugList = generateDebugSettings();
 		for (QuickEmail emailTemplate : debugList){
-			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater));
+			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, "TEST-SUBJECT", "TEST-TEXT"));
 		}
 	}
 
