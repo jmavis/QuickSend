@@ -79,12 +79,26 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		Intent intent = getIntent();
+	    String action = intent.getAction();
+	    String type = intent.getType();
+	    String subject = "EXAMPLE";
+		
+	    if (Intent.ACTION_SEND.equals(action) && type != null) {
+	        if ("text/plain".equals(type)) {
+	        	subject = intent.getStringExtra(Intent.EXTRA_TEXT);
+			}
+		}s
+		
 		LayoutInflater emailTypesInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);
 		List<QuickEmail> debugList = generateDebugSettings();
 		for (QuickEmail emailTemplate : debugList){
-			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, "TEST-SUBJECT", "TEST-TEXT"));
+			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, subject, "TEST-TEXT"));
 		}
+		
+		
 	}
 
 	@Override
