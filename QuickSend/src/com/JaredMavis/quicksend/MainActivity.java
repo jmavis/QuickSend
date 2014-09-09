@@ -55,6 +55,9 @@ public class MainActivity extends ActionBarActivity {
 			TextView subjectText = (TextView) generatedView.findViewById(R.id.subjectContet);
 			subjectText.setText( _subjectPrefix + text + _subjectSuffix);
 			
+			TextView emailLabel = (TextView) generatedView.findViewById(R.id.emailsLabel);
+			emailLabel.setText(_emails.toString());
+			
 			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
 			debugSendButton.setOnClickListener(new OnClickListener() {
 				
@@ -89,7 +92,7 @@ public class MainActivity extends ActionBarActivity {
 	        if ("text/plain".equals(type)) {
 	        	subject = intent.getStringExtra(Intent.EXTRA_TEXT);
 			}
-		}s
+		}
 		
 		LayoutInflater emailTypesInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);

@@ -4,19 +4,72 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/SubjectHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subject:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/subjectContet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Template Subject"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="To:"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+             <TextView
+                 android:id="@+id/emailsLabel"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:text="blah@blah.com"
+                 android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/SubjectHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Subject:"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TableRow
+                android:id="@+id/tableRow5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <TextView
+                    android:id="@+id/subjectContet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Template Subject"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            </TableRow>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
+    </TableLayout>
 
     <Button
         android:id="@+id/sendDebugBtn"
