@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,10 +49,10 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		
-		public LinearLayout generate(LayoutInflater inflater, String subject, String text){
+		public LinearLayout generate(LayoutInflater inflater, ViewGroup root, String subject, String text){
 			_subject = subject;
 			_text = text;
-			View generatedView = inflater.inflate(R.layout.email_template, null);
+			View generatedView = inflater.inflate(R.layout.email_template, root);
 			TextView subjectText = (TextView) generatedView.findViewById(R.id.subjectContet);
 			subjectText.setText( _subjectPrefix + text + _subjectSuffix);
 			
@@ -98,10 +99,8 @@ public class MainActivity extends ActionBarActivity {
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);
 		List<QuickEmail> debugList = generateDebugSettings();
 		for (QuickEmail emailTemplate : debugList){
-			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, subject, "TEST-TEXT"));
+			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, emailTemplateList, subject, "TEST-TEXT"));
 		}
-		
-		
 	}
 
 	@Override
