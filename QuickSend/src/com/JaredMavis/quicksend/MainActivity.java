@@ -17,6 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Primary activity. Will display a list of the user's email templates.
+ * If given an intent bundle for an email it fill out the templates.
+ * @author Jared Mavis
+ */
 public class MainActivity extends ActionBarActivity {
 	private class QuickEmail {
 		String[] _emails;
