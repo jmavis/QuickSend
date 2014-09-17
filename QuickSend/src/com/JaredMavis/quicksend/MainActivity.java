@@ -43,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
 		
 		public void sendEmail(String subject, String emailContent){
 			Intent emailIntent = new Intent(Intent.ACTION_SEND);
-			emailIntent.setType(",essage/rfc822");
+			emailIntent.setType("message/rfc822");
 			emailIntent.putExtra(Intent.EXTRA_EMAIL  , _emails);
 			emailIntent.putExtra(Intent.EXTRA_SUBJECT, _subjectPrefix + subject + _subjectSuffix);
 			emailIntent.putExtra(Intent.EXTRA_TEXT   , emailContent);
