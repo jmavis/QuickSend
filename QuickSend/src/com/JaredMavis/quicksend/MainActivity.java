@@ -23,6 +23,8 @@ import android.widget.Toast;
  * @author Jared Mavis
  */
 public class MainActivity extends ActionBarActivity {
+	private static final String defaultSubject = "SUBJECT";
+	
 	private class QuickEmail {
 		String[] _emails;
 		String _subjectPrefix = "";
@@ -71,6 +73,11 @@ public class MainActivity extends ActionBarActivity {
 					sendEmail(_subject, _text);
 				}
 			});
+			
+			if (_subject.equals(defaultSubject)){
+				debugSendButton.setText("Edit");
+			}
+			
 			return (LinearLayout) generatedView;
 		}
 	}
@@ -92,7 +99,7 @@ public class MainActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 	    String action = intent.getAction();
 	    String type = intent.getType();
-	    String subject = "EXAMPLE";
+	    String subject = defaultSubject;
 		
 	    if (Intent.ACTION_SEND.equals(action) && type != null) {
 	        if ("text/plain".equals(type)) {
