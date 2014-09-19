@@ -56,6 +56,22 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		
+		private OnClickListener editListener(){
+			return new OnClickListener() {
+				public void onClick(View v) {
+					// TODO make this edit the current email template
+				}
+			};
+		}
+		
+		private OnClickListener sendListener(){
+			return new OnClickListener() {
+				public void onClick(View v) {
+					sendEmail(_subject, _text);
+				}
+			};
+		}
+		
 		public LinearLayout generate(LayoutInflater inflater, ViewGroup root, String subject, String text){
 			_subject = subject;
 			_text = text;
@@ -67,15 +83,13 @@ public class MainActivity extends ActionBarActivity {
 			emailLabel.setText(_emails.toString());
 			
 			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
-			debugSendButton.setOnClickListener(new OnClickListener() {
-				
-				public void onClick(View v) {
-					sendEmail(_subject, _text);
-				}
-			});
-			
+
 			if (_subject.equals(defaultSubject)){
 				debugSendButton.setText("Edit");
+				debugSendButton.setOnClickListener(editListener());
+			} else {
+				debugSendButton.setText("Send");
+				debugSendButton.setOnClickListener(sendListener());
 			}
 			
 			return (LinearLayout) generatedView;
