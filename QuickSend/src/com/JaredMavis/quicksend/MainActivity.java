@@ -114,10 +114,12 @@ public class MainActivity extends ActionBarActivity {
 	    String action = intent.getAction();
 	    String type = intent.getType();
 	    String subject = defaultSubject;
+	    String text = "TEST-TEXT";
 		
 	    if (Intent.ACTION_SEND.equals(action) && type != null) {
 	        if ("text/plain".equals(type)) {
-	        	subject = intent.getStringExtra(Intent.EXTRA_TEXT);
+	        	text = intent.getStringExtra(Intent.EXTRA_TEXT);
+	        	subject = intent.getStringExtra(Intent.EXTRA_SUBJECT);
 			}
 		}
 		
@@ -125,7 +127,7 @@ public class MainActivity extends ActionBarActivity {
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);
 		List<QuickEmail> debugList = generateDebugSettings();
 		for (QuickEmail emailTemplate : debugList){
-			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, emailTemplateList, subject, "TEST-TEXT"));
+			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, emailTemplateList, subject, text));
 		}
 	}
 
