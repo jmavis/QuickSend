@@ -24,6 +24,7 @@ import android.widget.Toast;
  */
 public class MainActivity extends ActionBarActivity {
 	private static final String defaultSubject = "SUBJECT";
+	private static final String defaultText = "TEXT";
 	
 	private class QuickEmail {
 		String[] _emails;
@@ -114,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
 	    String action = intent.getAction();
 	    String type = intent.getType();
 	    String subject = defaultSubject;
-	    String text = "TEST-TEXT";
+	    String text = defaultText;
 		
 	    if (Intent.ACTION_SEND.equals(action) && type != null) {
 	        if ("text/plain".equals(type)) {
