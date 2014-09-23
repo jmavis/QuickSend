@@ -6,5 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="subject">Subject:</string>
     <string name="sendButtonLabel">Send</string>
+    <string name="toLabel">To:</string>
+    <string name="exampleEmail">example@domain.com</string>
 
 </resources>
