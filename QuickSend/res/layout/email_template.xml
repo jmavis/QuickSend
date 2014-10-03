@@ -17,7 +17,7 @@
                 android:id="@+id/toLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/toLable"
+                android:text="@string/toLabel"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
              <TextView

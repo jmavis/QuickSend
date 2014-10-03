@@ -73,17 +73,25 @@ public class MainActivity extends ActionBarActivity {
 			};
 		}
 		
-		public LinearLayout generate(LayoutInflater inflater, ViewGroup root, String subject, String text){
+		
+		public LinearLayout generate(LayoutInflater inflater, String subject, String text){
 			_subject = subject;
 			_text = text;
-			View generatedView = inflater.inflate(R.layout.email_template, root);
+			View generatedView = inflater.inflate(R.layout.email_template, null);
 			TextView subjectText = (TextView) generatedView.findViewById(R.id.subjectContet);
 			subjectText.setText( _subjectPrefix + text + _subjectSuffix);
 			
 			TextView emailLabel = (TextView) generatedView.findViewById(R.id.emailsLabel);
-			emailLabel.setText(_emails.toString());
 			
-			Button debugSendButton = (Button) findViewById(R.id.sendDebugBtn);
+			String emailList = "";
+			
+			for (String email : _emails){
+				emailList += email;
+			}
+			
+			emailLabel.setText(emailList);
+			
+			Button debugSendButton = (Button) generatedView.findViewById(R.id.sendDebugBtn);
 
 			if (_subject.equals(defaultSubject)){
 				debugSendButton.setText("Edit");
@@ -100,7 +108,7 @@ public class MainActivity extends ActionBarActivity {
 	private List<QuickEmail> generateDebugSettings(){
 		List<QuickEmail> debugEmailList = new ArrayList<QuickEmail>();
 		String[] testersEmails = {"hellfire073@hotmail.com"};
-		debugEmailList.add(new QuickEmail(testersEmails, "Hai", "Bye"));
+		debugEmailList.add(new QuickEmail(testersEmails, "", ""));
 		debugEmailList.add(new QuickEmail(testersEmails, "No Suffix", ""));
 		debugEmailList.add(new QuickEmail(testersEmails, "", "No Prefix"));
 		return debugEmailList;
@@ -128,7 +136,7 @@ public class MainActivity extends ActionBarActivity {
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);
 		List<QuickEmail> debugList = generateDebugSettings();
 		for (QuickEmail emailTemplate : debugList){
-			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, emailTemplateList, subject, text));
+			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, subject, text));
 		}
 	}
 
