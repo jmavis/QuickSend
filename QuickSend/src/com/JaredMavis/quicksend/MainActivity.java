@@ -2,6 +2,11 @@ package com.JaredMavis.quicksend;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +32,10 @@ public class MainActivity extends ActionBarActivity {
 	private static final String defaultText = "TEXT";
 	
 	private class QuickEmail {
+		final static String SUBJECT_PREFIX_KEY = "SUBJECT_PREFIX_KEY";
+		final static String SUBJECT_SUFFIX_KEY = "SUBJECT_SUFFIX_KEY";
+		final static String EMAILS_KEY = "SUBJECT_PREFIX_KEY";
+		
 		String[] _emails;
 		String _subjectPrefix = "";
 		String _subjectSuffix = "";
@@ -42,6 +51,16 @@ public class MainActivity extends ActionBarActivity {
 			this(emails);
 			_subjectPrefix = prefix;
 			_subjectSuffix = suffix;
+		}
+		
+		public QuickEmail(JSONObject jsonFormat) throws JSONException{
+			_subjectPrefix = jsonFormat.getString(SUBJECT_PREFIX_KEY);
+			_subjectSuffix = jsonFormat.getString(SUBJECT_SUFFIX_KEY);
+			JSONArray storedEmails = jsonFormat.getJSONArray(EMAILS_KEY);
+			_emails = new String[storedEmails.length()];
+			for (int i = 0; i < storedEmails.length(); i++){
+				_emails[i] = storedEmails.getString(i);
+			}
 		}
 		
 		public void sendEmail(String subject, String emailContent){
@@ -103,7 +122,26 @@ public class MainActivity extends ActionBarActivity {
 			
 			return (LinearLayout) generatedView;
 		}
+		
+		public String toString() {
+			JSONObject jsonFormat = new JSONObject();
+			try {
+				jsonFormat.put(SUBJECT_PREFIX_KEY, this._subjectPrefix);
+				jsonFormat.put(SUBJECT_SUFFIX_KEY, this._subjectSuffix);
+				JSONArray emailsArray = new JSONArray();
+				for (String email : _emails){
+					emailsArray.put(email);
+				}
+				jsonFormat.put(EMAILS_KEY, emailsArray);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return jsonFormat.toString();
+		}
 	}
+	
+	
 	
 	private List<QuickEmail> generateDebugSettings(){
 		List<QuickEmail> debugEmailList = new ArrayList<QuickEmail>();
