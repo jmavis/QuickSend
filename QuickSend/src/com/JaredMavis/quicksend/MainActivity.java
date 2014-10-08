@@ -35,6 +35,56 @@ public class MainActivity extends ActionBarActivity {
 	
 	private static final String QUICK_EMAIL_STORAGE_KEY = "QUICK_EMAIL_STORAGE_KEY";
 	
+	private class QuickEmailList {
+		List<QuickEmail> listOfEmails;
+		
+		public QuickEmailList(SharedPreferences sharedPrefs) {
+			listOfEmails = this.getStoredQuickEmails(sharedPrefs);
+		}
+		
+		private List<QuickEmail> getStoredQuickEmails(SharedPreferences prefs) {
+			String jsonStringEmails = prefs.getString(QUICK_EMAIL_STORAGE_KEY, "");
+			if (jsonStringEmails == "") {
+				return this.generateDebugSettings();
+			} else {
+				try {
+					JSONArray jsonEmails = new JSONArray(jsonStringEmails);
+					List<QuickEmail> emails = new ArrayList<QuickEmail>();
+					for (int i = 0; i < jsonEmails.length(); i++) {
+						emails.add(new QuickEmail(jsonEmails.getJSONObject(i)));
+					}
+					return emails;
+				} catch (JSONException e) {
+					return this.generateDebugSettings();
+				}
+			}
+		}
+		
+		private void storeQuickEmails(SharedPreferences prefs, List<QuickEmail> emails) {
+			Editor editor = prefs.edit();
+			JSONArray jsonEmails = new JSONArray();
+			for (QuickEmail email : emails) {
+				jsonEmails.put(email.toString());
+			}
+			editor.putString(QUICK_EMAIL_STORAGE_KEY, jsonEmails.toString());
+			editor.commit();
+		}
+
+		
+		private List<QuickEmail> generateDebugSettings(){
+			List<QuickEmail> debugEmailList = new ArrayList<QuickEmail>();
+			String[] testersEmails = {"hellfire073@hotmail.com"};
+			debugEmailList.add(new QuickEmail(testersEmails, "", ""));
+			debugEmailList.add(new QuickEmail(testersEmails, "No Suffix", ""));
+			debugEmailList.add(new QuickEmail(testersEmails, "", "No Prefix"));
+			return debugEmailList;
+		}
+
+		public List<QuickEmail> getEmails() {
+			return this.listOfEmails;
+		}
+	}
+	
 	private class QuickEmail {
 		final static String SUBJECT_PREFIX_KEY = "SUBJECT_PREFIX_KEY";
 		final static String SUBJECT_SUFFIX_KEY = "SUBJECT_SUFFIX_KEY";
@@ -96,7 +146,6 @@ public class MainActivity extends ActionBarActivity {
 			};
 		}
 		
-		
 		public LinearLayout generate(LayoutInflater inflater, String subject, String text){
 			_subject = subject;
 			_text = text;
@@ -138,49 +187,10 @@ public class MainActivity extends ActionBarActivity {
 				}
 				jsonFormat.put(EMAILS_KEY, emailsArray);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return jsonFormat.toString();
 		}
-	}
-	
-	private List<QuickEmail> getStoredQuickEmails(SharedPreferences prefs) {
-		String jsonStringEmails = prefs.getString(QUICK_EMAIL_STORAGE_KEY, "");
-		if (jsonStringEmails == "") {
-			return this.generateDebugSettings();
-		} else {
-			try {
-				JSONArray jsonEmails = new JSONArray(jsonStringEmails);
-				List<QuickEmail> emails = new ArrayList<QuickEmail>();
-				for (int i = 0; i < jsonEmails.length(); i++) {
-					emails.add(new QuickEmail(jsonEmails.getJSONObject(i)));
-				}
-				return emails;
-			} catch (JSONException e) {
-				return this.generateDebugSettings();
-			}
-		}
-	}
-	
-	private void storeQuickEmails(SharedPreferences prefs, List<QuickEmail> emails) {
-		Editor editor = prefs.edit();
-		JSONArray jsonEmails = new JSONArray();
-		for (QuickEmail email : emails) {
-			jsonEmails.put(email.toString());
-		}
-		editor.putString(QUICK_EMAIL_STORAGE_KEY, jsonEmails.toString());
-		editor.commit();
-	}
-
-	
-	private List<QuickEmail> generateDebugSettings(){
-		List<QuickEmail> debugEmailList = new ArrayList<QuickEmail>();
-		String[] testersEmails = {"hellfire073@hotmail.com"};
-		debugEmailList.add(new QuickEmail(testersEmails, "", ""));
-		debugEmailList.add(new QuickEmail(testersEmails, "No Suffix", ""));
-		debugEmailList.add(new QuickEmail(testersEmails, "", "No Prefix"));
-		return debugEmailList;
 	}
 
 	@Override
@@ -203,7 +213,8 @@ public class MainActivity extends ActionBarActivity {
 		
 		LayoutInflater emailTypesInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		LinearLayout emailTemplateList = (LinearLayout) findViewById(R.id.emailTemplateList);
-		List<QuickEmail> debugList = getStoredQuickEmails(PreferenceManager.getDefaultSharedPreferences(this));
+		QuickEmailList emailList = new QuickEmailList(PreferenceManager.getDefaultSharedPreferences(this));
+		List<QuickEmail> debugList = emailList.getEmails();
 		for (QuickEmail emailTemplate : debugList){
 			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, subject, text));
 		}
