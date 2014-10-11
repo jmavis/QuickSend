@@ -7,6 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.JaredMavis.quicksend.QuickEmail.QuickEmailListener;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,8 +33,6 @@ import android.widget.Toast;
  * @author Jared Mavis
  */
 public class MainActivity extends ActionBarActivity {
-	private static final String defaultSubject = "SUBJECT";
-	private static final String defaultText = "TEXT";
 	
 	private static final String QUICK_EMAIL_STORAGE_KEY = "QUICK_EMAIL_STORAGE_KEY";
 	
@@ -40,6 +41,9 @@ public class MainActivity extends ActionBarActivity {
 		
 		public QuickEmailList(SharedPreferences sharedPrefs) {
 			listOfEmails = this.getStoredQuickEmails(sharedPrefs);
+			for (QuickEmail email : listOfEmails) {
+				email.setEmailListener(quickMailListener());
+			}
 		}
 		
 		private List<QuickEmail> getStoredQuickEmails(SharedPreferences prefs) {
@@ -51,7 +55,8 @@ public class MainActivity extends ActionBarActivity {
 					JSONArray jsonEmails = new JSONArray(jsonStringEmails);
 					List<QuickEmail> emails = new ArrayList<QuickEmail>();
 					for (int i = 0; i < jsonEmails.length(); i++) {
-						emails.add(new QuickEmail(jsonEmails.getJSONObject(i)));
+						QuickEmail email = new QuickEmail(jsonEmails.getJSONObject(i));
+						emails.add(email);
 					}
 					return emails;
 				} catch (JSONException e) {
@@ -83,115 +88,23 @@ public class MainActivity extends ActionBarActivity {
 		public List<QuickEmail> getEmails() {
 			return this.listOfEmails;
 		}
+		
+		private QuickEmailListener quickMailListener() {
+			return new QuickEmailListener() {
+				@Override
+				public void onSendEmailClick(Intent emailIntent) {
+					try {
+					    startActivity(emailIntent);
+					} catch (android.content.ActivityNotFoundException ex) {
+					    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+					}
+				}
+			};
+			
+		}
 	}
 	
-	private class QuickEmail {
-		final static String SUBJECT_PREFIX_KEY = "SUBJECT_PREFIX_KEY";
-		final static String SUBJECT_SUFFIX_KEY = "SUBJECT_SUFFIX_KEY";
-		final static String EMAILS_KEY = "SUBJECT_PREFIX_KEY";
-		
-		String[] _emails;
-		String _subjectPrefix = "";
-		String _subjectSuffix = "";
-		
-		String _subject;
-		String _text;
-		
-		public QuickEmail(String[] emails){
-			_emails = emails;
-		}
-		
-		public QuickEmail(String[] emails, String prefix, String suffix){
-			this(emails);
-			_subjectPrefix = prefix;
-			_subjectSuffix = suffix;
-		}
-		
-		public QuickEmail(JSONObject jsonFormat) throws JSONException{
-			_subjectPrefix = jsonFormat.getString(SUBJECT_PREFIX_KEY);
-			_subjectSuffix = jsonFormat.getString(SUBJECT_SUFFIX_KEY);
-			JSONArray storedEmails = jsonFormat.getJSONArray(EMAILS_KEY);
-			_emails = new String[storedEmails.length()];
-			for (int i = 0; i < storedEmails.length(); i++){
-				_emails[i] = storedEmails.getString(i);
-			}
-		}
-		
-		public void sendEmail(String subject, String emailContent){
-			Intent emailIntent = new Intent(Intent.ACTION_SEND);
-			emailIntent.setType("message/rfc822");
-			emailIntent.putExtra(Intent.EXTRA_EMAIL  , _emails);
-			emailIntent.putExtra(Intent.EXTRA_SUBJECT, _subjectPrefix + subject + _subjectSuffix);
-			emailIntent.putExtra(Intent.EXTRA_TEXT   , emailContent);
-			try {
-			    startActivity(emailIntent);
-			} catch (android.content.ActivityNotFoundException ex) {
-			    Toast.makeText(MainActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-			}
-		}
-		
-		private OnClickListener editListener(){
-			return new OnClickListener() {
-				public void onClick(View v) {
-					// TODO make this edit the current email template
-				}
-			};
-		}
-		
-		private OnClickListener sendListener(){
-			return new OnClickListener() {
-				public void onClick(View v) {
-					sendEmail(_subject, _text);
-				}
-			};
-		}
-		
-		public LinearLayout generate(LayoutInflater inflater, String subject, String text){
-			_subject = subject;
-			_text = text;
-			View generatedView = inflater.inflate(R.layout.email_template, null);
-			TextView subjectText = (TextView) generatedView.findViewById(R.id.subjectContet);
-			subjectText.setText( _subjectPrefix + text + _subjectSuffix);
-			
-			TextView emailLabel = (TextView) generatedView.findViewById(R.id.emailsLabel);
-			
-			String emailList = "";
-			
-			for (String email : _emails){
-				emailList += email;
-			}
-			
-			emailLabel.setText(emailList);
-			
-			Button debugSendButton = (Button) generatedView.findViewById(R.id.sendDebugBtn);
-
-			if (_subject.equals(defaultSubject)){
-				debugSendButton.setText("Edit");
-				debugSendButton.setOnClickListener(editListener());
-			} else {
-				debugSendButton.setText("Send");
-				debugSendButton.setOnClickListener(sendListener());
-			}
-			
-			return (LinearLayout) generatedView;
-		}
-		
-		public String toString() {
-			JSONObject jsonFormat = new JSONObject();
-			try {
-				jsonFormat.put(SUBJECT_PREFIX_KEY, this._subjectPrefix);
-				jsonFormat.put(SUBJECT_SUFFIX_KEY, this._subjectSuffix);
-				JSONArray emailsArray = new JSONArray();
-				for (String email : _emails){
-					emailsArray.put(email);
-				}
-				jsonFormat.put(EMAILS_KEY, emailsArray);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			return jsonFormat.toString();
-		}
-	}
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -201,8 +114,8 @@ public class MainActivity extends ActionBarActivity {
 		Intent intent = getIntent();
 	    String action = intent.getAction();
 	    String type = intent.getType();
-	    String subject = defaultSubject;
-	    String text = defaultText;
+	    String subject = null;
+	    String text = null;
 		
 	    if (Intent.ACTION_SEND.equals(action) && type != null) {
 	        if ("text/plain".equals(type)) {
@@ -218,6 +131,10 @@ public class MainActivity extends ActionBarActivity {
 		for (QuickEmail emailTemplate : debugList){
 			emailTemplateList.addView(emailTemplate.generate(emailTypesInflater, subject, text));
 		}
+	}
+	
+	public void onActivityResult (int requestCode, int resultCode, Intent data) {
+//		this.finish();
 	}
 
 	@Override
