@@ -17,6 +17,7 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import android.widget.Toast;
  * @author Jared Mavis
  */
 public class MainActivity extends ActionBarActivity {
+	private static final String TAG = "MainActivity";
 	
 	private static final String QUICK_EMAIL_STORAGE_KEY = "QUICK_EMAIL_STORAGE_KEY";
 	
@@ -133,10 +135,6 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	
-	public void onActivityResult (int requestCode, int resultCode, Intent data) {
-//		this.finish();
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
