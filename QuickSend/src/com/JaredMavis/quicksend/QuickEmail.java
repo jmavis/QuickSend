@@ -3,7 +3,6 @@ package com.JaredMavis.quicksend;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
