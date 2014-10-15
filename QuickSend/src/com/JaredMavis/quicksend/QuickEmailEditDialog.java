@@ -33,7 +33,6 @@ public class QuickEmailEditDialog extends DialogFragment {
 
 	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 	    if (EditorInfo.IME_ACTION_DONE == actionId) {
-	        // Return input text to activity
 	    	EditEmailDialogListener activity = (EditEmailDialogListener) getActivity();
 	        activity.onFinishEditDialog(mEditText.getText().toString());
 	        this.dismiss();
