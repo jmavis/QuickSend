@@ -82,7 +82,7 @@ public class QuickEmail {
 		};
 	}
 	
-	public LinearLayout generate(LayoutInflater inflater, String subject, String text){
+	public LinearLayout generate(LayoutInflater inflater, String subject, String text, String[] emails){
 		_subject = subject != null ? subject : defaultSubject;
 		_text = text != null ? text : defaultText;
 		
@@ -95,6 +95,10 @@ public class QuickEmail {
 		String emailList = "";
 		
 		for (String email : _emails){
+			emailList += email;
+		}
+		
+		for (String email : emails){
 			emailList += email;
 		}
 		
